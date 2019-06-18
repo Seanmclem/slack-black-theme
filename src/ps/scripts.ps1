@@ -32,7 +32,7 @@ function InstallSlackPatch([switch] $DevMode = $false) {
     $fileContents = Get-Content $slackFile
 
     # Check if files have already been patched
-    $patchIdentifier = "//Patch from https://github.com/marchica/slack-black-theme"
+    $patchIdentifier = "//Patch from https://github.com/seanmclem/slack-black-theme"
 
     if ($fileContents | Select-String -Pattern $patchIdentifier -SimpleMatch -Quiet) {
         Write-Host "Already patched!"
@@ -46,10 +46,10 @@ function InstallSlackPatch([switch] $DevMode = $false) {
     if ($DevMode) {
         $url = "http://127.0.0.1:8080/custom.css"
     } else {
-        $url = "https://raw.githubusercontent.com/marchica/slack-black-theme/master/dist/custom.css";
+        $url = "https://raw.githubusercontent.com/seanmclem/slack-black-theme/master/dist/custom.css";
     }
 
-    $patchContents = (Invoke-WebRequest "https://raw.githubusercontent.com/marchica/slack-black-theme/master/src/js/SlackPatch.js" -UseBasicParsing).Content.Replace($urlPlaceholder, $url)
+    $patchContents = (Invoke-WebRequest "https://raw.githubusercontent.com/seanmclem/slack-black-theme/master/src/js/SlackPatch.js" -UseBasicParsing).Content.Replace($urlPlaceholder, $url)
 
     # Add patch to end of slack file
     Add-Content -Path $slackFile -Value $patchContents
@@ -59,7 +59,7 @@ function InstallSlackPatch([switch] $DevMode = $false) {
         $pathPlaceholder = "PATH_TO_LOCAL_CSS"
         $path = (Join-Path (Resolve-Path $PSScriptRoot\..\..) dist\custom.css).Replace('\', '\\')
 
-        $devPatchContents = (Invoke-WebRequest "https://raw.githubusercontent.com/marchica/slack-black-theme/master/src/js/DevSlackPatch.js" -UseBasicParsing).Content.Replace($pathPlaceholder, $path)
+        $devPatchContents = (Invoke-WebRequest "https://raw.githubusercontent.com/seanmclem/slack-black-theme/master/src/js/DevSlackPatch.js" -UseBasicParsing).Content.Replace($pathPlaceholder, $path)
 
         # Add patch to end of slack file
         Add-Content -Path $slackFile -Value $devPatchContents
